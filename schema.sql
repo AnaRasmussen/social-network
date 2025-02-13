@@ -12,10 +12,12 @@ CREATE TABLE follows (
 );
 
 CREATE TABLE posts (
-    id              INTERGER PRIMARY KEY,
+    id              INTEGER PRIMARY KEY,
     username        TEXT NOT NULL,
     message         TEXT NOT NULL,
     posted_at       DATETIME NOT NULL,
 
     FOREIGN KEY (username) REFERENCES accounts (username)
 );
+
+

@@ -7,6 +7,6 @@ def main():
         make_accounts(db)
 
 def make_accounts(db):
-    add_account(db, 'rdawg')
+    add_account(db, 'firstpost')
 
 main()
