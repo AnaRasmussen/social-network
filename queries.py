@@ -14,16 +14,13 @@ def delete_account(db, username):
     db.execute(f"DELETE FROM accounts WHERE username = ?", (username,))
 
 def follow_user(db, follower, followee):
-    follower_id = get_user_id_by_username(db, follower)
-    followee_id = get_user_id_by_username(db, followee)
-    if follower_id and followee_id:
-        db.execute(f"INSERT INTO follows (follower, followee) VALUES (?, ?)", (follower_id, followee_id))
+    # Use usernames directly in the follows table
+    db.execute(f"INSERT INTO follows (follower, followee) VALUES (?, ?)", (follower, followee))
 
 def unfollow_user(db, follower, followee):
-    follower_id = get_user_id_by_username(db, follower)
-    followee_id = get_user_id_by_username(db, followee)
-    if follower_id and followee_id:
-        db.execute(f"DELETE FROM follows WHERE follower = ? AND followee = ?", (follower_id, followee_id))
+    # Use usernames directly in the follows table
+    db.execute(f"DELETE FROM follows WHERE follower = ? AND followee = ?", (follower, followee))
+
 
 def add_post(db, username, message):
     posted_at = datetime.now()
@@ -38,8 +35,6 @@ def like_post(db, post_id, username):
 def unlike_post(db, post_id, username):
     db.execute(f"DELETE FROM likes WHERE post_id = ? AND username = ?", (post_id, username))
 
-
-
 def get_feed(db, username):
     query = """
     SELECT p.id, p.username, p.message, p.posted_at
@@ -52,7 +47,7 @@ def get_feed(db, username):
 
 def get_recommended_posts(db, username):
     query = """
-    SELECT p.id, p.username, p.message, p.posted_At
+    SELECT p.id, p.username, p.message, p.posted_at
     FROM posts p
     JOIN follows f1 ON p.username = f1.followee
     JOIN follows f2 ON f1.follower = f2.followee
@@ -72,3 +67,16 @@ def print_all_accounts(db):
     print("Accounts Table:")
     for account in accounts:
         print(f"Username: {account[0]}, Followers: { account[1]}, Following: {account[2]}")
+
+def print_all_posts(db):
+    posts = db.execute("SELECT * FROM posts").fetchall()
+    print("Posts Table:")
+    for post in posts:
+        print(f"Post ID: {post[0]}, Username: {post[1]}, Message: {post[2]}, Posted At: {post[3]}")
+
+def print_all_follows(db):
+    follows = db.execute("SELECT * FROM follows").fetchall()
+    print("Follows Table:")
+    for follow in follows:
+        print(f"Follower: {follow[0]}, Followee: {follow[1]}")
+

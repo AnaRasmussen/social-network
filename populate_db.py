@@ -27,35 +27,46 @@ def main():
         bob_id = get_user_id_by_username(db, 'bob_brown')
 
         # Add accounts for users
-        add_account(db, 'jane_doe_account1', jane_id)
-        add_account(db, 'john_smith_account1', john_id)
-        add_account(db, 'alice_jones_account1', alice_id)
-        add_account(db, 'bob_brown_account1', bob_id)
+        add_account(db, 'jane_doe', jane_id)
+        add_account(db, 'john_smith', john_id)
+        add_account(db, 'alice_jones', alice_id)
+        add_account(db, 'bob_brown', bob_id)
 
         # Add posts for users
-        add_post(db, 'john_smith_account1', 'John here! Excited to share my thoughts.')
-        add_post(db, 'alice_jones_account1', 'Alice loves coding and coffee!')
-        add_post(db, 'bob_brown_account1', 'Bob is here to make new friends!')
+        add_post(db, 'john_smith', 'John here! Excited to share my thoughts.')
+        add_post(db, 'alice_jones', 'Alice loves coding and coffee!')
+        add_post(db, 'bob_brown', 'Bob is here to make new friends!')
 
         # Follow functionality
         follow_user(db, 'jane_doe', 'john_smith')  # Jane follows John
         follow_user(db, 'jane_doe', 'alice_jones')  # Jane follows Alice
+        follow_user(db, 'alice_jones', 'john_smith') # Alice follows John
+        follow_user(db, 'alice_jones', 'jane_doe')
 
         # Unfollow functionality
         unfollow_user(db, 'jane_doe', 'john_smith')  # Jane unfollows John
 
         # Print all accounts
         print_all_accounts(db)
+        
+        # # Print all posts
+        # print_all_posts(db)
+
+        # # Print all follows
+        # print_all_follows(db)
 
         # Display feed for Jane
         print("Jane's Feed:")
-        feed = get_feed(db, 'john_smith')
-        for message, posted_at in feed:
+        feed = get_feed(db, 'jane_doe')
+        # print("Feed", feed)
+        for post_id, username, message, posted_at in feed:
             print(f"{posted_at}: {message}")
+
 
         # Display recommended posts for Jane
         print(f"Recommended posts for Jane:")
         recommended_posts = get_recommended_posts(db, 'jane_doe')
+        # print("recommended", recommended_posts)
         for post in recommended_posts:
             print(f"Post ID: {post[0]}, Username: {post[1]}, Message: {post[2]}, Posted At: {post[3]}")
 
