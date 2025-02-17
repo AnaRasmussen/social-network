@@ -1,14 +1,23 @@
+BEGIN;
+
+DROP TABLE IF EXISTS accounts;
+DROP TABLE IF EXISTS follows;
+DROP TABLE IF EXISTS posts;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS recommended_posts;
+
 CREATE TABLE accounts (
-    username        TEXT PRIMARY KEY
+    username        TEXT PRIMARY KEY,
+    followers       INTEGER,
+    following       INTEGER
 );
 
 CREATE TABLE follows (
     follower        TEXT NOT NULL,
     followee        TEXT NOT NULL,
-
     PRIMARY KEY (follower, followee),
-    FOREIGN KEY (follower) REFERENCES accounts (username),
-    FOREIGN KEY (followee) REFERENCES accounts (username)
+    FOREIGN KEY (follower) REFERENCES accounts (username) ON DELETE CASCADE,
+    FOREIGN KEY (followee) REFERENCES accounts (username) ON DELETE CASCADE
 );
 
 CREATE TABLE posts (
@@ -16,8 +25,22 @@ CREATE TABLE posts (
     username        TEXT NOT NULL,
     message         TEXT NOT NULL,
     posted_at       DATETIME NOT NULL,
+    FOREIGN KEY (username) REFERENCES accounts (username) ON DELETE CASCADE
+);
 
+CREATE TABLE users (
+    username        TEXT NOT NULL PRIMARY KEY,
+    email           TEXT NOT NULL,
+    password        TEXT NOT NULL,
+    age             INTEGER NOT NULL
+);
+
+CREATE TABLE recommended_posts (
+    id              INTEGER PRIMARY KEY,
+    username        TEXT NOT NULL,
+    message         TEXT NOT NULL,
+    posted_at       DATETIME NOT NULL,
     FOREIGN KEY (username) REFERENCES accounts (username)
 );
 
-
+COMMIT;
