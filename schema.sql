@@ -6,6 +6,7 @@ DROP TABLE IF EXISTS posts;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS recommended_posts;
 DROP TABLE IF EXISTS likes;
+DROP TABLE IF EXISTS blocks;
 
 CREATE TABLE accounts (
     account_id      INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -52,6 +53,14 @@ CREATE TABLE likes (
     PRIMARY KEY (post_id, username),
     FOREIGN KEY (post_id) REFERENCES posts (id) ON DELETE CASCADE,
     FOREIGN KEY (username) REFERENCES accounts (username) ON DELETE CASCADE
+);
+
+CREATE TABLE blocks (
+    blocker_id      INTEGER NOT NULL,
+    blocked_id      INTEGER NOT NULL,
+    PRIMARY KEY (blocker_id, blocked_id),
+    FOREIGN KEY (blocker_id) REFERENCES users (user_id) ON DELETE CASCADE,
+    FOREIGN KEY (blocked_id) REFERENCES users (user_id) ON DELETE CASCADE
 );
 
 COMMIT; 

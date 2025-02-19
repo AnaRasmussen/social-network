@@ -36,39 +36,38 @@ def main():
         add_post(db, 'john_smith', 'John here! Excited to share my thoughts.')
         add_post(db, 'alice_jones', 'Alice loves coding and coffee!')
         add_post(db, 'bob_brown', 'Bob is here to make new friends!')
+        add_post(db, 'jane_doe', 'Jane is ready to meet people!')
 
-        # Follow functionality
-        follow_user(db, 'jane_doe', 'john_smith')  # Jane follows John
-        follow_user(db, 'jane_doe', 'alice_jones')  # Jane follows Alice
-        follow_user(db, 'alice_jones', 'john_smith') # Alice follows John
-        follow_user(db, 'alice_jones', 'jane_doe')
+        # Block a user
+        block_user(db, 'jane_doe', 'john_smith')  # Jane blocks John
 
-        # Unfollow functionality
-        unfollow_user(db, 'jane_doe', 'john_smith')  # Jane unfollows John
+        # Try following the blocked user (this should fail)
+        follow_user(db, 'john_smith', 'jane_doe')  # John tries to follow Jane, but is blocked
 
-        # Print all accounts
-        print_all_accounts(db)
-        
-        # # Print all posts
-        # print_all_posts(db)
+        # Display feed for John (Jane's posts will be excluded)
+        feed = get_feed(db, 'john_smith')
+        print("John's Feed:")
+        for post_id, username, message, posted_at in feed:
+            print(f"{posted_at}: {message}")
 
-        # # Print all follows
-        # print_all_follows(db)
+        # Unblock a user
+        unblock_user(db, 'jane_doe', 'john_smith')  # Jane unblocks John
+        follow_user(db, 'john_smith', 'jane_doe')
 
-        # Display feed for Jane
-        print("Jane's Feed:")
-        feed = get_feed(db, 'jane_doe')
+        # Display feed for John
+        print("John's Feed:")
+        feed = get_feed(db, 'john_smith')
         # print("Feed", feed)
         for post_id, username, message, posted_at in feed:
             print(f"{posted_at}: {message}")
 
+        follow_user(db, 'jane_doe', 'alice_jones')
 
-        # Display recommended posts for Jane
-        print(f"Recommended posts for Jane:")
-        recommended_posts = get_recommended_posts(db, 'jane_doe')
-        # print("recommended", recommended_posts)
+        # Show recommended feed for John
+        print("John's Recommended")
+        recommended_posts = get_recommended_posts(db, 'john_smith')
         for post in recommended_posts:
-            print(f"Post ID: {post[0]}, Username: {post[1]}, Message: {post[2]}, Posted At: {post[3]}")
+            print(f"Username: {post[1]}, Message: {post[2]}, Posted At: {post[3]}")
 
 if __name__ == "__main__":
     main()
