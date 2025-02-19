@@ -118,6 +118,10 @@ def unblock_user(db, blocker_account_username, blocked_account_username):
                (blocker_account_id, blocked_account_id))
     print(f"{blocker_account_username} has unblocked {blocked_account_username}.")
 
+def edit_post(db, post_id, new_message):
+    db.execute(f"UPDATE posts SET message = ? WHERE id = ?", (new_message, post_id))
+    print(f"Post ID {post_id} has been updated.")
+
 
 def print_all_accounts(db):
     accounts = db.execute("SELECT * FROM accounts").fetchall()
