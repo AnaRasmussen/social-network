@@ -10,64 +10,58 @@ Populating the database with less random data, accounts, users, follows etc. fro
 def main():
     db = sqlite3.connect('social.db')
     with db:
-        # Create tables if they don't exist
         with open('schema.sql', 'r') as f:
             db.executescript(f.read())
 
-        # Add users
         add_user(db, 'jane_doe', 'jane.doe@example.com', 'password123', 30)
         add_user(db, 'john_smith', 'john.smith@example.com', 'password456', 25)
         add_user(db, 'alice_jones', 'alice.jones@example.com', 'password789', 28)
         add_user(db, 'bob_brown', 'bob.brown@example.com', 'password101', 22)
 
-        # Get user IDs
         jane_id = get_user_id_by_username(db, 'jane_doe')
         john_id = get_user_id_by_username(db, 'john_smith')
         alice_id = get_user_id_by_username(db, 'alice_jones')
         bob_id = get_user_id_by_username(db, 'bob_brown')
 
-        # Add accounts for users
-        add_account(db, 'jane_doe', jane_id)
-        add_account(db, 'john_smith', john_id)
-        add_account(db, 'alice_jones', alice_id)
-        add_account(db, 'bob_brown', bob_id)
+        add_account(db, 'jane_doe_account1', jane_id)
+        add_account(db, 'john_smith_account1', john_id)
+        add_account(db, 'alice_jones_account1', alice_id)
+        add_account(db, 'bob_brown_account1', bob_id)
 
-        # Add posts for users
-        add_post(db, 'john_smith', 'John here! Excited to share my thoughts.')
-        add_post(db, 'alice_jones', 'Alice loves coding and coffee!')
-        add_post(db, 'bob_brown', 'Bob is here to make new friends!')
-        add_post(db, 'jane_doe', 'Jane is ready to meet people!')
+        add_post(db, 'john_smith_account1', 'John here! Excited to share my thoughts.')
+        add_post(db, 'alice_jones_account1', 'Alice loves coding and coffee!')
+        add_post(db, 'bob_brown_account1', 'Bob is here to make new friends!')
+        add_post(db, 'jane_doe_account1', 'Jane is ready to meet people!')
+        add_post(db, 'jane_doe_account1', 'Update!')
+        add_post(db, 'jane_doe_account1', 'Hello!')
 
-        # Block a user
-        block_user(db, 'jane_doe', 'john_smith')  # Jane blocks John
+        like_post(db, 4, 'john_smith_account1') #John Smith likes Jane Doe's post, boosting her influence score
 
-        # Try following the blocked user (this should fail)
-        follow_user(db, 'john_smith', 'jane_doe')  # John tries to follow Jane, but is blocked
+        block_user(db, 'jane_doe_account1', 'john_smith_account1')
 
-        # Display feed for John (Jane's posts will be excluded)
-        feed = get_feed(db, 'john_smith')
-        print("John's Feed:")
+        follow_user(db, 'john_smith_account1', 'jane_doe_account1')
+
+        feed = get_feed(db, 'john_smith_account1')
+        print("John's Feed With Blocked:")
         for post_id, username, message, posted_at in feed:
             print(f"{posted_at}: {message}")
 
-        # Unblock a user
-        unblock_user(db, 'jane_doe', 'john_smith')  # Jane unblocks John
-        follow_user(db, 'john_smith', 'jane_doe')
+        unblock_user(db, 'jane_doe_account1', 'john_smith_account1')
+        follow_user(db, 'john_smith_account1', 'jane_doe_account1')
 
-        # Display feed for John
-        print("John's Feed:")
-        feed = get_feed(db, 'john_smith')
-        # print("Feed", feed)
+        feed = get_feed(db, 'john_smith_account1')
+        print("John's Feed After Unblock:")
         for post_id, username, message, posted_at in feed:
             print(f"{posted_at}: {message}")
 
-        follow_user(db, 'jane_doe', 'alice_jones')
+        follow_user(db, 'jane_doe_account1', 'alice_jones_account1')
 
-        # Show recommended feed for John
         print("John's Recommended")
-        recommended_posts = get_recommended_posts(db, 'john_smith')
+        recommended_posts = get_recommended_posts(db, 'john_smith_account1')
         for post in recommended_posts:
             print(f"Username: {post[1]}, Message: {post[2]}, Posted At: {post[3]}")
+
+        get_most_influential_users(db)
 
 if __name__ == "__main__":
     main()
