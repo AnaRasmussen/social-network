@@ -125,15 +125,29 @@ def edit_post(db, post_id, new_message):
 
 def print_all_accounts(db):
     accounts = db.execute("SELECT * FROM accounts").fetchall()
+
     print("Accounts Table:")
     for account in accounts:
-        print(f"Username: {account[0]}, Followers: { account[1]}, Following: {account[2]}")
+        print(f"Username: {account[1]}")
+
+def count_total_accounts(db):
+    query = """
+    SELECT u.username, COUNT(a.account_id) AS total_accounts
+    FROM users u
+    LEFT JOIN accounts a ON u.user_id = a.user_id
+    GROUP BY u.user_id;
+    """
+    results = db.execute(query).fetchall()
+    
+    print("Total Accounts per User:")
+    for username, total_accounts in results:
+        print(f"Username: {username}, Total Accounts: {total_accounts}")
 
 def print_all_posts(db):
     posts = db.execute("SELECT * FROM posts").fetchall()
     print("Posts Table:")
     for post in posts:
-        print(f"Post ID: {post[0]}, Username: {post[1]}, Message: {post[2]}, Posted At: {post[3]}")
+        print(f"Post ID: {post[0]}, Acount_ID: {post[1]}, Message: {post[2]}, Posted At: {post[3]}")
 
 def print_all_follows(db):
     follows = db.execute("SELECT * FROM follows").fetchall()
