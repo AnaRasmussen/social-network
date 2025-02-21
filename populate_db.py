@@ -95,13 +95,19 @@ def main():
 
 
         # # Print all accounts
+        print()
+        print()
         print("================================================")
         print("================================================")
         count_total_accounts(db)
+        print()
+        print()
         print("================================================")
         print("================================================")
         # # # Print all posts
         print_all_posts(db)
+        print()
+        print()
         print("================================================")
         print("================================================")
         delete_post(db, 30)
@@ -111,9 +117,13 @@ def main():
         delete_post(db, 26)
         delete_post(db, 25)
         delete_post(db, 24)
+        print()
+        print()
         print("================================================")
         print("================================================")
         print_all_posts(db)
+        print()
+        print()
         print("================================================")
         print("================================================")
         # # # Print all follows
@@ -126,6 +136,16 @@ def main():
         like_post(db, 1, 'bob_brown_account1')
         like_post(db, 1, 'jane_doe_account4')
         like_post(db, 1, 'john_smith_account1')
+        like_post(db, 2, 'alice_jones_account1')  # Alice likes John's post
+        like_post(db, 3, 'bob_brown_account1')    # Bob likes Alice's post
+        like_post(db, 5, 'charlie_white_account1') # Charlie likes Bob's post
+        like_post(db, 6, 'diana_black_account1')   # Diana likes Charlie's post
+        like_post(db, 7, 'eric_green_account1')    # Eric likes Diana's post
+        like_post(db, 8, 'frank_red_account1')      # Frank likes Eric's post
+        like_post(db, 9, 'alice_smart_account1')    # Alice Smart likes Frank's post
+        like_post(db, 10, 'mike_bold_account1')     # Mike likes Alice Smart's post
+        like_post(db, 11, 'lucy_loud_account1')      # Lucy likes Mike's post
+        like_post(db, 12, 'oliver_cool_account1')    # Oliver likes Lucy's post
 
         block_user(db, 'jane_doe_account1', 'john_smith_account1')
         block_user(db, 'noah_brave_account1', 'john_smith_account1')
@@ -153,38 +173,58 @@ def main():
         follow_user(db, 'mia_quick_account1', 'jack_happy_account1')  # Mia follows Jack's account
         # print_all_follows(db)
 
+        print()
+        print()
         print("================================================")
         print("================================================")
         feed = get_feed(db, 'john_smith_account1')
         print("John's Feed With Blocked:")
         for post_id, username, message, posted_at in feed:
             print(f"{posted_at}: {message}")
+        print()
+        print()
         print("================================================")
         print("================================================")
 
         unblock_user(db, 'jane_doe_account1', 'john_smith_account1')
         follow_user(db, 'john_smith_account1', 'jane_doe_account1')
 
+        print()
+        print()
         print("================================================")
         print("================================================")
         feed = get_feed(db, 'john_smith_account1')
         print("John's Feed After Unblock:")
         for post_id, username, message, posted_at in feed:
             print(f"{posted_at}: {message}")
+        print()
+        print()
         print("================================================")
         print("================================================")
 
+        print("Posts with Like Counts:")
+        posts_with_likes = get_posts_with_likes(db)
+        for post_id, message, posted_at, username, like_count in posts_with_likes:
+            print(f"Post ID: {post_id}, Username: {username}, Message: {message}, Posted At: {posted_at}, Likes: {like_count}")
+        print()
+        print()
+        print("================================================")
+        print("================================================")
         follow_user(db, 'jane_doe_account1', 'alice_jones_account1')
 
         print("John's Recommended")
         recommended_posts = get_recommended_posts(db, 'john_smith_account1')
         for post in recommended_posts:
             print(f"Username: {post[1]}, Message: {post[2]}, Posted At: {post[3]}")
+        print()
+        print()
         print("================================================")
         print("================================================")
 
         get_most_influential_users(db)
 
+        print()
+        print()
         print("================================================")
         print("================================================")
 

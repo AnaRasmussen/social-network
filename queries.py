@@ -185,3 +185,14 @@ def get_most_influential_users(db):
     for row in result:
         username, influence_score = row
         print(f"Username: {username}, Influence Score: {influence_score}")
+
+def get_posts_with_likes(db):
+    query = """
+    SELECT p.id, p.message, p.posted_at, a.username, COUNT(l.account_id) AS like_count
+    FROM posts p
+    JOIN accounts a ON p.account_id = a.account_id
+    LEFT JOIN likes l ON p.id = l.post_id
+    GROUP BY p.id, a.username
+    ORDER BY p.posted_at DESC
+    """
+    return db.execute(query).fetchall()
